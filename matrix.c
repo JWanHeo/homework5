@@ -8,9 +8,13 @@ void addition_matrix(int **matrixA, int **matrixB, int row, int col);
 void free_matrix(int **matrix, int rows);
 void substraction_matrix(int **matrixA, int **matrixB, int row, int col);
 void transpose_matrix(int **matrix, int row, int col);
+void multiply_matrix(int **matrixA, int **matrixB, int aRow, int aCol, int bRow, int bCol);
 
 int main(void) 
 {
+
+  printf("[----- 허제완 2020069031 -----]");
+
   int aRow, aCol, bRow, bCol;
 
   printf("A의 행/열 : ");
@@ -60,6 +64,9 @@ int main(void)
 
   printf("[A의 전치행렬 T]\n");
   transpose_matrix(A, aRow, aCol);
+
+  printf("[A x B]\n");
+  multiply_matrix(A, B, aRow, aCol, bRow, bCol);
 
 
   free_matrix(A, aRow);
@@ -127,20 +134,42 @@ void substraction_matrix(int **matrixA, int **matrixB, int row, int col) {
   free_matrix(C, row); // C에 할당된 메모리 해제
 }
 
-void transpose_matrix(int **matrix, int row, int col) {
+/*행렬의 전치행렬을 구하는 함수*/
+void transpose_matrix(int **matrix, int row, int col) { // 전치할 행렬과 그 행렬의 행과 열을 매개변수로 받음
 
-  int **T = (int**)malloc(row * sizeof(int)); // 결과를 저장할 행렬 C 생성
+  int **T = (int**)malloc(row * sizeof(int)); // 결과를 저장할 행렬 T 생성
   for(int i = 0; i < row; i++) { 
     T[i] = (int*)malloc(col * sizeof(int));
   }
 
-  for(int i = 0; i < row; i++) { // C에 A-B를 수행한 결과를 저장
+  for(int i = 0; i < row; i++) { // T에 matrix를 전치한 결과를 저장
     for(int j = 0; j < col; j++) {
       T[i][j] = matrix[j][i];
     }
   }
 
-  print_matrix(T, row, col); // C 행렬을 출력
+  print_matrix(T, row, col); // T 행렬을 출력
 
-  free_matrix(T, row); // C에 할당된 메모리 해제
+  free_matrix(T, row); // T에 할당된 메모리 해제
+}
+
+/*두 행렬의 곱셈을 수행하는 함수*/
+void multiply_matrix(int **matrixA, int **matrixB, int aRow, int aCol, int bRow, int bCol) {
+
+  int **C = (int**)malloc(aRow * sizeof(int)); // 결과를 저장할 행렬 C 생성
+  for(int i = 0; i < aRow; i++) { 
+    C[i] = (int*)calloc(bCol, sizeof(int));
+  }
+
+  for(int i = 0; i < aRow; i++) { // C에 A x B를 수행한 결과를 저장
+    for(int j = 0; j < bCol; j++) {
+      for(int k = 0; k < aCol; k++) {
+        C[i][j] += matrixA[i][k] * matrixB[k][i]; // A의 행의 원소들과 B의 열의 원소들을 곱한 값을 더하여 C의 각 행과 열에 저장
+      }
+    }
+  }
+
+  print_matrix(C, aRow, bCol); // C 행렬을 출력
+
+  free_matrix(C, aRow); // C에 할당된 메모리 해제
 }
