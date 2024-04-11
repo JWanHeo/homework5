@@ -6,6 +6,8 @@
 void print_matrix(int ** matrix, int row, int col);
 void addition_matrix(int **matrixA, int **matrixB, int row, int col);
 void free_matrix(int **matrix, int rows);
+void substraction_matrix(int **matrixA, int **matrixB, int row, int col);
+void transpose_matrix(int **matrix, int row, int col);
 
 int main(void) 
 {
@@ -53,6 +55,12 @@ int main(void)
   printf("[A + B]\n");
   addition_matrix(A, B, aRow, aCol);
 
+  printf("[A - B]\n");
+  substraction_matrix(A, B, aRow, aCol);
+
+  printf("[A의 전치행렬 T]\n");
+  transpose_matrix(A, aRow, aCol);
+
 
   free_matrix(A, aRow);
   free_matrix(B, bRow);
@@ -98,4 +106,41 @@ void free_matrix(int **matrix, int rows) { // 행렬과 행의 개수를 매개변수로 받음
         free(matrix[i]);
     }
     free(matrix); // 행에 할당했던 메모리 해제
+}
+
+/*두 행렬의 뺄셈을 수행하는 함수*/
+void substraction_matrix(int **matrixA, int **matrixB, int row, int col) {
+
+  int **C = (int**)malloc(row * sizeof(int)); // 결과를 저장할 행렬 C 생성
+  for(int i = 0; i < row; i++) { 
+    C[i] = (int*)malloc(col * sizeof(int));
+  }
+
+  for(int i = 0; i < row; i++) { // C에 A-B를 수행한 결과를 저장
+    for(int j = 0; j < col; j++) {
+      C[i][j] = matrixA[i][j] - matrixB[i][j];
+    }
+  }
+
+  print_matrix(C, row, col); // C 행렬을 출력
+
+  free_matrix(C, row); // C에 할당된 메모리 해제
+}
+
+void transpose_matrix(int **matrix, int row, int col) {
+
+  int **T = (int**)malloc(row * sizeof(int)); // 결과를 저장할 행렬 C 생성
+  for(int i = 0; i < row; i++) { 
+    T[i] = (int*)malloc(col * sizeof(int));
+  }
+
+  for(int i = 0; i < row; i++) { // C에 A-B를 수행한 결과를 저장
+    for(int j = 0; j < col; j++) {
+      T[i][j] = matrix[j][i];
+    }
+  }
+
+  print_matrix(T, row, col); // C 행렬을 출력
+
+  free_matrix(T, row); // C에 할당된 메모리 해제
 }
