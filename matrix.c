@@ -13,7 +13,7 @@ void multiply_matrix(int **matrixA, int **matrixB, int aRow, int aCol, int bRow,
 int main(void) 
 {
 
-  printf("[----- 허제완 2020069031 -----]");
+  printf("[----- 허제완 2020069031 -----]\n\n");
 
   int aRow, aCol, bRow, bCol;
 
@@ -22,6 +22,11 @@ int main(void)
   printf("B의 행/열 : ");
   scanf("%d %d", &bRow, &bCol); // B의 행과 열 입력
   printf("\n");
+
+  if(aRow != bRow || aCol != bCol) {
+    printf("A + B 및 A - B 수행을 위해 A의 행/열과 B의 행/열은 같아야 합니다.");
+    return 1;
+  }
 
   /*행렬 A를 동적할당을 통해 생성*/
   int **A = (int**)malloc(aRow * sizeof(int)); // A의 행 생성
